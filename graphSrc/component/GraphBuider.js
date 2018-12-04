@@ -24,11 +24,11 @@ const margin = 15;
 createScales = (yMin, yMax, xMin, xMax) => {
     const yScale = d3.scale
         .scaleLinear()
-        .domain([0, yMax + 0.25 * yMax])
+        .domain([-0.05 * yMax, yMax + 0.05 * yMax])
         .range([yGraphDimension, 0]);
     const yScaleForLabel = d3.scale
         .scaleLinear()
-        .domain([0, yMax + 0.25 * yMax])
+        .domain([-0.05 * yMax, yMax + 0.05 * yMax])
         .range([0, yGraphDimension]);
     const xScale = d3.scale
         .scaleTime()
