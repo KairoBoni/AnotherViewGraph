@@ -12,7 +12,7 @@ export const data1 = [
     { x: new Date('01/08/01'), y: 19 },
     { x: new Date('01/09/01'), y: 13 },
     { x: new Date('01/10/01'), y: 16 },
-    { x: new Date('01/11/01'), y: 453453 },
+    { x: new Date('01/11/01'), y: 32 },
     { x: new Date('01/12/01'), y: 20 },
     { x: new Date('01/13/01'), y: 12 },
     { x: new Date('01/14/01'), y: 5 },
