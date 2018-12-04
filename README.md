@@ -1,1 +1,4 @@
 # ReactNativeGraph
+
+
+![](app.gif)
