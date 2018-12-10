@@ -1,4 +1,0 @@
-# ReactNativeGraph
-
-
-![](app.gif)
