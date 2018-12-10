@@ -1,3 +1,3 @@
 # AnotherViewGraph
 
-![](app.gif)
+![](appTest.gif)
