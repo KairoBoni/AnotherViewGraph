@@ -74,7 +74,8 @@ const GraphReducer = (state = initialState, action) => {
         case "CHANGE_GRAPH":
             const {
                 newData,
-                oldData
+                oldData,
+                typeGraph
             } = action
 
             state = {
@@ -85,8 +86,8 @@ const GraphReducer = (state = initialState, action) => {
             };
 
             const yMax = this.getMaxYDomain(newData, oldData);
-            const newNextGraph = buildGraph(newData, yMax);
-            const oldNextGraph = buildGraph(oldData, yMax);
+            const newNextGraph = buildGraph(newData, yMax, typeGraph);
+            const oldNextGraph = buildGraph(oldData, yMax, typeGraph);
             const newPreviusGraph = state.graph;
             const oldPreviusGraph = state.oldGraph;
             state = this.getDiff(newNextGraph.ticks, oldNextGraph.ticks, state);

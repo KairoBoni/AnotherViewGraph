@@ -4,11 +4,12 @@ import React, {
 
 import {
     View,
-    LayoutAnimation,
+    Animated,
+    Easing,
+    TouchableOpacity,
+    Text
 } from 'react-native';
 
-const AnimationDurationMs = 500;
-import Morph from 'art/morph/path';
 
 import { showWhoInfo, showNumberOfActivityUser, showDifference } from './GraphHeader';
 import { showLabelX, showDots } from './GraphLabels';
@@ -17,120 +18,158 @@ import { graphRender } from './GraphRender';
 
 import { chageGraph, dateSelect } from '../action/GraphActions';
 import { connect } from 'react-redux';
+import GestureRecognizer from 'react-native-swipe-gestures';
+import { xGraphDimension } from './GraphDimensions'
 
 class Graph extends Component {
     state = {
         linePath: "",
         oldLinePath: "",
+        graphShow: (xGraphDimension('7days') / 4) * 3,
+        animatedGraphShow: new Animated.Value((xGraphDimension('7days') / 4) * 3),
+        new7Data: [],
+        old7Data: [],
+        new30Data: [],
+        old30Data: [],
+        typeGraph: '7days',
+        partSelected: 3
     }
 
-    componentWillReceiveProps = async () => {
-        await setTimeout(() => {
-        }, 10);
+    fillData = async () => {
+        let data = this.props.data;
+        data = data.reverse();
+        new7Data = data.slice(0, 28)
+        old7Data = data.slice(7, 35)
+        new30Data = data.slice(0, 30)
+        old30Data = data.slice(30, 60)
+
+        await this.setState({
+            new7Data: new7Data.reverse(),
+            old7Data: old7Data.reverse(),
+            new30Data: new30Data.reverse(),
+            old30Data: old30Data.reverse()
+        })
+    }
+
+    selectData = async (newData, oldData) => {
+        this.props.chageGraph(newData, oldData, this.state.typeGraph);
+        setTimeout(() => {
+            this.setState({
+                linePath: this.props.graph.linePath,
+                oldLinePath: this.props.graph.oldLinePath,
+            })
+        }, 1);
+    }
+
+    componentDidMount = async () => {
+        await this.fillData();
         const {
-            newData,
-            oldData
-        } = this.props
-        if (this.props.graph.newData !== newData) {
-            this.props.chageGraph(newData, oldData);
-            if (this.props.graph.newPreviusGraph.path !== "") {
-                this.setAnimation(this.props.graph.graph, this.props.graph.newPreviusGraph, 'new');
-                this.setAnimation(this.props.graph.oldGraph, this.props.graph.oldPreviusGraph, 'old');
-            } else {
-                this.setState({
-                    linePath: this.props.graph.linePath,
-                    oldLinePath: this.props.graph.oldLinePath,
-                })
-            }
+            new7Data,
+            old7Data
+        } = this.state
+        this.selectData(new7Data, old7Data);
+    }
+
+    onSwipeRight() {
+        let {
+            graphShow,
+        } = this.state;
+        if (this.state.typeGraph === '7days'
+            && this.state.partSelected > 0) {
+            graphShow += -xGraphDimension(this.state.typeGraph) / 4;
+            Animated.timing(
+                this.state.animatedGraphShow, {
+                    toValue: graphShow,
+                    easing: Easing.ease,
+                    duration: 500
+                }
+            ).start();
+            this.setState({
+                graphShow,
+                partSelected: this.state.partSelected - 1
+            })
         }
     }
 
-    setAnimation = (nextGraph, previusGraph, whoUpdate) => {
-        const pathFrom = previusGraph.path;
-        const pathTo = nextGraph.path;
-        LayoutAnimation.configureNext(
-            LayoutAnimation.create(
-                AnimationDurationMs,
-                LayoutAnimation.Types.easeInEaseOut,
-                LayoutAnimation.Properties.scaleXY
-            ),
-        );
-
-        if (whoUpdate === 'new') {
+    onSwipeLeft() {
+        let {
+            graphShow,
+        } = this.state;
+        if (this.state.typeGraph === '7days'
+            && this.state.partSelected < 3) {
+            graphShow += xGraphDimension(this.state.typeGraph) / 4;
+            Animated.timing(
+                this.state.animatedGraphShow, {
+                    toValue: graphShow,
+                    easing: Easing.ease,
+                    duration: 500
+                }
+            ).start();
             this.setState({
-                graph: nextGraph,
-                linePath: Morph.Tween(
-                    pathFrom,
-                    pathTo,
-                ),
-            }, () => {
-                this.animate('new');
-            });
-        } else {
-            this.setState({
-                oldGraph: nextGraph,
-                oldLinePath: Morph.Tween(
-                    pathFrom,
-                    pathTo,
-                ),
-            }, () => {
-                this.animate('old');
-            });
+                graphShow,
+                partSelected: this.state.partSelected + 1
+            })
         }
     }
-    animate = (whoUpdate, start) => {
-        this.animating = requestAnimationFrame((timestamp) => {
-            if (!start) {
-                start = timestamp;
-            }
-            if (whoUpdate === 'new') {
-                delta = (timestamp - start) / AnimationDurationMs;
-                if (delta > 1) {
-                    this.setState({
-                        linePath: this.state.graph.path,
-                    });
-                    return;
-                }
-                this.state.linePath.tween(delta);
-                this.setState(this.state, () => {
-                    this.animate('new', start);
-                });
-            } else {
-                const delta = (timestamp - start) / AnimationDurationMs;
-                if (delta > 1) {
-                    this.setState({
-                        oldLinePath: this.state.oldGraph.path,
-                    });
-                    return;
-                }
-                this.state.oldLinePath.tween(delta);
-                this.setState(this.state, () => {
-                    this.animate('old', start);
-                });
-            }
-        });
+
+    last7Days = async () => {
+        await this.setState({
+            typeGraph: '7days',
+            graphShow: (xGraphDimension('7days') / 4) * 3,
+            animatedGraphShow: new Animated.Value((xGraphDimension('7days') / 4) * 3),
+            partSelected: 3
+        })
+        this.selectData(this.state.new7Data, this.state.old7Data);
+
     }
+
+    last30Days = async () => {
+        await this.setState({
+            typeGraph: '30days',
+            graphShow: 0,
+            animatedGraphShow: new Animated.Value(0),
+        })
+        this.selectData(this.state.new30Data, this.state.old30Data);
+    }
+
 
     render() {
         const graph = this.props.graph;
         return (
-            <View>
+            <View >
+                <View style={stylesGraph.viewButtons}>
+                    <TouchableOpacity style={[stylesGraph.buttons, this.state.typeGraph === '7days' && { backgroundColor: "#9D9C9C" }]} onPress={this.last7Days}>
+                        <Text style={[stylesGraph.textButton, this.state.typeGraph === '7days' && { color: "#FFFFFF" }]}>
+                            Ultimos 7 Dias
+                        </Text>
+                    </TouchableOpacity >
+                    <TouchableOpacity style={[stylesGraph.buttons, this.state.typeGraph === '30days' && { backgroundColor: "#9D9C9C" }]} onPress={this.last30Days}>
+                        <Text style={[stylesGraph.textButton, this.state.typeGraph === '30days' && { color: "#ffffff" }]}>
+                            Ultimos 30 Dias
+                        </Text>
+                    </TouchableOpacity>
+                </View>
                 <View style={stylesGraph.containerComparation}>
                     {showWhoInfo(graph.infoToShow, graph.dotCliked)}
-                    <View style={stylesGraph.numberUsers}>
+                    <View style={[stylesGraph.numberUsers]}>
                         {showNumberOfActivityUser(graph.infoToShow, graph.dotCliked, graph.diffNew)}
                         {showDifference(graph.dotCliked, graph.diff, graph.diffNew, graph.diffOld, graph.indexOfInfo)}
                     </View>
                 </View>
-                <View>
-                    {graphRender(this.state.linePath, this.state.oldLinePath)}
-                    <View key={'ticksX'} >
-                        {showLabelX(graph.graph, graph.diff, graph.dotCliked, this.props.dateSelect)}
-                    </View>
-                    <View key={'ticksY'}>
-                        {showDots(graph.graph, this.props.dateSelect)}
-                    </View>
-                </View>
+                <Animated.View style={{ right: this.state.animatedGraphShow }}>
+                    <GestureRecognizer
+                        onSwipeRight={(state) => this.onSwipeRight(state)}
+                        onSwipeLeft={(state) => this.onSwipeLeft(state)}
+                    >
+                        {graphRender(this.state.linePath, this.state.oldLinePath, this.state.typeGraph)}
+                        <View key={'ticksX'} >
+                            {showLabelX(graph.graph, graph.diff, graph.dotCliked, this.props.dateSelect, this.state.typeGraph)}
+                        </View>
+                        <View key={'ticksY'}>
+                            {showDots(graph.graph, this.props.dateSelect)}
+                        </View>
+                    </GestureRecognizer>
+                </Animated.View>
             </View>
         );
     }
@@ -144,8 +183,8 @@ const mapStateToProps = (state) => {
 
 const mapDispatchToProps = (dispatch) => {
     return {
-        chageGraph: (newData, oldData) => {
-            dispatch(chageGraph(newData, oldData, this.setNewAnimation))
+        chageGraph: (newData, oldData, typeGraph) => {
+            dispatch(chageGraph(newData, oldData, typeGraph))
         },
 
         dateSelect: (data, index) => {

@@ -1,8 +1,9 @@
-export const chageGraph = (newData, oldData) => {
+export const chageGraph = (newData, oldData, typeGraph) => {
     return {
         type: "CHANGE_GRAPH",
         newData,
-        oldData
+        oldData,
+        typeGraph
     }
 }
 

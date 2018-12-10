@@ -2,28 +2,35 @@ import React from 'react';
 import {
     View,
     Text,
-    TouchableOpacity
+    TouchableOpacity,
+    Animated
 } from 'react-native';
 
 import { stylesGraph } from './GraphStyles'
 import { xGraphDimension } from './GraphDimensions'
 
 
-export const showLabelX = (graph, diff, dotCliked, showNumber) => {
+export const showLabelX = (graph, diff, dotCliked, showNumber, typeGraph) => {
     return graph.ticks.map((tick, index) => {
         const tickStyles = {};
         tickStyles.left = tick.x;
+        let length = 0
+        if(typeGraph === '7days'){
+            length = 28
+        } else {
+            length = diff.length
+        }
         return (
             <View key={index} style={[tickStyles]}>
                 <TouchableOpacity
                     onPress={() => showNumber(tick.dataum, index)}
                     style={[stylesGraph.xBox,
                     {
-                        width: xGraphDimension / diff.length,
-                        left: -(xGraphDimension / diff.length) / 2,
+                        width: xGraphDimension(typeGraph) / length,
+                        left: -(xGraphDimension(typeGraph) / length) / 2,
                     },]
                     }>
-                    <View style={[stylesGraph.xTrace, { left: (xGraphDimension / diff.length) / 2 },
+                    <View style={[stylesGraph.xTrace, { left: (xGraphDimension(typeGraph) / length) / 2 },
                     (dotCliked === tick.dataum.x.getDate()) &&
                     { borderRightColor: '#AAAAAA' }]}>
                     </View>

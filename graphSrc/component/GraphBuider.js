@@ -21,7 +21,7 @@ const d3 = {
 
 const margin = 15;
 
-createScales = (yMin, yMax, xMin, xMax) => {
+createScales = (typeGraph, yMax, xMin, xMax) => {
     const yScale = d3.scale
         .scaleLinear()
         .domain([-0.05 * yMax, yMax + 0.05 * yMax])
@@ -33,7 +33,7 @@ createScales = (yMin, yMax, xMin, xMax) => {
     const xScale = d3.scale
         .scaleTime()
         .domain([xMin, xMax])
-        .range([margin, xGraphDimension]);
+        .range([margin, xGraphDimension(typeGraph)]);
     return {
         yScale,
         yScaleForLabel,
@@ -63,24 +63,20 @@ createLineGraph = (xScale, yScale) => {
 
 }
 
-export default buildGraph = (data, yMax) => {
+export default buildGraph = (data, yMax, typeGraph) => {
     const x = data.map((data) => {
         return data.x;
     });
     const y = data.map((data) => {
         return data.y;
     });
-    const yMin = y.reduce((a, b) => {
-        return Math.min(a, b);
-    })
     const xMin = x[0];
     const xMax = x[x.length - 1];
-
     const {
         yScale,
         yScaleForLabel,
         xScale
-    } = this.createScales(yMin, yMax, xMin, xMax)
+    } = this.createScales(typeGraph, yMax, xMin, xMax)
 
     const lineGraph = this.createLineGraph(xScale, yScale);
     const ticks = this.createAxisGraph(xScale, yScaleForLabel, data);

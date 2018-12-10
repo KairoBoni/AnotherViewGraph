@@ -2,7 +2,7 @@ import {
     StyleSheet,
 } from 'react-native';
 
-import {xDimension, yDimension, yGraphDimension} from './GraphDimensions'
+import { xDimension, yDimension, yGraphDimension } from './GraphDimensions'
 
 export const stylesGraph = StyleSheet.create({
     titleValue: {
@@ -52,7 +52,7 @@ export const stylesGraph = StyleSheet.create({
     xBox: {
         position: "absolute",
         height: yGraphDimension,
-        bottom: 0,
+        bottom: 0
     },
 
     xTrace: {
@@ -62,5 +62,29 @@ export const stylesGraph = StyleSheet.create({
         borderRightWidth: 1,
         borderRightColor: '#eeeeee',
 
+    },
+
+    viewButtons: {
+        flexDirection: 'row',
+        justifyContent: 'space-around',
+        margin: 10,
+        textAlign: 'center'
+    },
+
+    buttons: {
+        width: '40%',
+        height: 37,
+        borderRadius: 8,
+        borderColor:' rgba(63, 62, 62, 0.5)',
+        borderWidth: 1,
+        justifyContent: 'space-around',
+    },
+    
+    textButton: {
+        textAlign: 'center',
+        fontSize: 15,
+        color: '#3f3e3e',
+        opacity: 0.5,
+        fontWeight: 'bold',
     }
 });

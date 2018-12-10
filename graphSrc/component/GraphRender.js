@@ -13,9 +13,9 @@ const {
     Surface,
 } = ART;
 
-export const graphRender = (linePath, oldLinePath) => {
+export const graphRender = (linePath, oldLinePath, typeGraph) => {
     return (
-        <Surface width={xGraphDimension} height={yGraphDimension} visible={false}>
+        <Surface width={xGraphDimension(typeGraph)} height={yGraphDimension} visible={false}>
             <Group x={0} y={0}>
                 <Shape
                     d={linePath}
