@@ -3,7 +3,6 @@ import {
     View,
     Text,
     TouchableOpacity,
-    Animated
 } from 'react-native';
 
 import { stylesGraph } from './GraphStyles'
