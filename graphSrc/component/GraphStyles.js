@@ -20,14 +20,15 @@ export const stylesGraph = StyleSheet.create({
     },
 
     containerComparation: {
-        width: xDimension * 0.7,
         height: yDimension * 0.075,
+        justifyContent: 'space-between',
+        width: '70%'
 
     },
 
     tickLabelX: {
         position: 'absolute',
-        left: -11,
+        left: -15,
         fontSize: 10,
         top: 3,
         textAlign: 'center',
@@ -75,11 +76,11 @@ export const stylesGraph = StyleSheet.create({
         width: '40%',
         height: 37,
         borderRadius: 8,
-        borderColor:' rgba(63, 62, 62, 0.5)',
+        borderColor: ' rgba(63, 62, 62, 0.5)',
         borderWidth: 1,
         justifyContent: 'space-around',
     },
-    
+
     textButton: {
         textAlign: 'center',
         fontSize: 15,

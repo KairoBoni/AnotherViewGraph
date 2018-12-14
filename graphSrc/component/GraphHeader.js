@@ -38,20 +38,24 @@ export const showWhoInfo = (infoToShow, dotCliked) => {
     }
 }
 
-export const showNumberOfActivityUser = (infoToShow, dotCliked, diffNew) => {
+export const showNumberOfActivityUser = (infoToShow, dotCliked, diffNew, titleGraph) => {
     if (dotCliked !== 0) {
         return (
-            <Text >
-                Number of Active Users:{"\t"}{"\t"}
+            <View style={{ flexDirection: 'row', width: '75%', justifyContent: 'space-between' }}>
+                <Text >
+                    {titleGraph}:
+                </Text>
                 <Text style={{ fontWeight: "bold", color: "black" }}>
                     {infoToShow.y}
                 </Text>
-            </Text>
+            </View>
         )
     } else {
         return (
-            <Text>
-                Number of Active Users:{"\t"}{"\t"}
+            <View style={{ flexDirection: 'row', width: '75%', justifyContent: 'space-between' }}>
+                <Text >
+                    {titleGraph}:
+                </Text>
                 <Text style={{ fontWeight: "bold", color: "black" }}>
                     {
                         (Math.round(diffNew.reduce((value, acc) => {
@@ -60,7 +64,7 @@ export const showNumberOfActivityUser = (infoToShow, dotCliked, diffNew) => {
                         }) / diffNew.length * 100)) / 100
                     }
                 </Text>
-            </Text>
+            </View>
         )
     }
 }
@@ -80,7 +84,7 @@ export const showDifference = (dotCliked, diff, diffNew, diffOld, indexOfInfo) =
     if (dotCliked === 0) {
         if (monthDiff >= 0) {
             return (
-                <View style={{flexDirection: "row"}}>
+                <View style={{ flexDirection: "row" }}>
                     <Icon name="arrow-upward" size={18} color="#239E5F" />
                     <Text style={{ color: "#239E5F", fontWeight: "bold" }}>
                         {(Math.abs(monthDiff)) + "%"}
@@ -89,7 +93,7 @@ export const showDifference = (dotCliked, diff, diffNew, diffOld, indexOfInfo) =
             )
         } else {
             return (
-                <View style={{flexDirection: "row"}}>
+                <View style={{ flexDirection: "row" }}>
                     <Icon name="arrow-downward" size={18} color="#ED5F6E" />
                     <Text style={{ color: "#ED5F6E", fontWeight: "bold" }}>
                         {(Math.abs(monthDiff)) + "%"}
@@ -100,7 +104,7 @@ export const showDifference = (dotCliked, diff, diffNew, diffOld, indexOfInfo) =
     } else {
         if (diff[indexOfInfo] >= 0) {
             return (
-                <View style={{flexDirection: "row"}}>
+                <View style={{ flexDirection: "row" }}>
                     <Icon name="arrow-upward" size={18} color="#239E5F" />
                     <Text style={{ color: "#239E5F", fontWeight: "bold" }}>
                         {(Math.abs(Math.round(diff[indexOfInfo] * 100) / 100)) + "%"}
@@ -109,7 +113,7 @@ export const showDifference = (dotCliked, diff, diffNew, diffOld, indexOfInfo) =
             )
         } else {
             return (
-                <View style={{flexDirection: "row"}}>
+                <View style={{ flexDirection: "row" }}>
                     <Icon name="arrow-downward" size={18} color="#ED5F6E" />
                     <Text style={{ color: "#ED5F6E", fontWeight: "bold" }}>
                         {(Math.abs(Math.round(diff[indexOfInfo] * 100) / 100)) + "%"}

@@ -140,19 +140,19 @@ class Graph extends Component {
                 <View style={stylesGraph.viewButtons}>
                     <TouchableOpacity style={[stylesGraph.buttons, this.state.typeGraph === '7days' && { backgroundColor: "#9D9C9C" }]} onPress={this.last7Days}>
                         <Text style={[stylesGraph.textButton, this.state.typeGraph === '7days' && { color: "#FFFFFF" }]}>
-                            Ultimos 7 Dias
+                            Last 7 Days
                         </Text>
                     </TouchableOpacity >
                     <TouchableOpacity style={[stylesGraph.buttons, this.state.typeGraph === '30days' && { backgroundColor: "#9D9C9C" }]} onPress={this.last30Days}>
                         <Text style={[stylesGraph.textButton, this.state.typeGraph === '30days' && { color: "#ffffff" }]}>
-                            Ultimos 30 Dias
+                            Last 30 Days
                         </Text>
                     </TouchableOpacity>
                 </View>
                 <View style={stylesGraph.containerComparation}>
                     {showWhoInfo(graph.infoToShow, graph.dotCliked)}
                     <View style={[stylesGraph.numberUsers]}>
-                        {showNumberOfActivityUser(graph.infoToShow, graph.dotCliked, graph.diffNew)}
+                        {showNumberOfActivityUser(graph.infoToShow, graph.dotCliked, graph.diffNew, this.props.titleGraph)}
                         {showDifference(graph.dotCliked, graph.diff, graph.diffNew, graph.diffOld, graph.indexOfInfo)}
                     </View>
                 </View>

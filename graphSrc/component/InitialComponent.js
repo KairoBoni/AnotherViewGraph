@@ -12,7 +12,7 @@ export default class InitialComponent extends Component {
   render() {
     return (
       <View>
-        <Graph data={data} />
+        <Graph data={data} titleGraph={'Number of Users'} />
       </View>
     );
   }

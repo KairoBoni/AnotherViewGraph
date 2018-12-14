@@ -7,7 +7,6 @@ export const data = [
 { x: new Date('4/28/01'), y: 404},
 { x: new Date('4/29/01'), y: 37},
 { x: new Date('4/30/01'), y: 363},
-{ x: new Date('4/31/01'), y: 59},
 { x: new Date('5/1/01'), y: 78},
 { x: new Date('5/2/01'), y: 184},
 { x: new Date('5/3/01'), y: 242},
